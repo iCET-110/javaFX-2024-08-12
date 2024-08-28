@@ -58,6 +58,7 @@ public class ViewFormController implements Initializable {
         }));
         loadTable();
     }
+
     private void setTextToValues(Customer newValue) {
         txtId.setText(newValue.getId());
         txtName.setText(newValue.getName());
@@ -78,29 +79,29 @@ public class ViewFormController implements Initializable {
                 txtAddress.getText(),
                 dateDob.getValue(),
                 Double.parseDouble(txtSalary.getText()),
-                txtCity.getText(),txtProvince.getText(),
+                txtCity.getText(), txtProvince.getText(),
                 txtPostalCode.getText()
         );
 //INSERT INTO Customer VALUES('C001','Mr','Danapala','1981-2-6',40000,'No.20 Walana','Panadura','Western',12500);
         try {
-            String SQL ="INSERT INTO customer VALUES(?,?,?,?,?,?,?,?,?)";
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/thogakade", "root", "1234");
+            String SQL = "INSERT INTO customer VALUES(?,?,?,?,?,?,?,?,?)";
+            Connection connection = DBConnection.getInstance().getConnection();
             PreparedStatement psTm = connection.prepareStatement(SQL);
-            psTm.setObject(1,customer.getId());
-            psTm.setObject(2,customer.getTitle());
-            psTm.setObject(3,customer.getName());
+            psTm.setObject(1, customer.getId());
+            psTm.setObject(2, customer.getTitle());
+            psTm.setObject(3, customer.getName());
             psTm.setDate(4, Date.valueOf(customer.getDob()));
-            psTm.setDouble(5,customer.getSalary());
-            psTm.setObject(6,customer.getAddress());
-            psTm.setObject(7,customer.getCity());
-            psTm.setObject(8,customer.getProvince());
-            psTm.setObject(9,customer.getPostalCode());
+            psTm.setDouble(5, customer.getSalary());
+            psTm.setObject(6, customer.getAddress());
+            psTm.setObject(7, customer.getCity());
+            psTm.setObject(8, customer.getProvince());
+            psTm.setObject(9, customer.getPostalCode());
 
-          boolean b = psTm.executeUpdate()>0;
+            boolean b = psTm.executeUpdate() > 0;
             System.out.println(b);
 
-            if(b){
-                new Alert(Alert.AlertType.INFORMATION,"Customer Added!").show();
+            if (b) {
+                new Alert(Alert.AlertType.INFORMATION, "Customer Added!").show();
                 loadTable();
             }
 
@@ -112,7 +113,7 @@ public class ViewFormController implements Initializable {
     }
 
 
-    private void loadTable(){
+    private void loadTable() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
@@ -122,26 +123,20 @@ public class ViewFormController implements Initializable {
         colProvince.setCellValueFactory(new PropertyValueFactory<>("province"));
         colPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
 
-        List<Customer> customerList = DBConnection.getInstance().getConnection();
         ObservableList<Customer> customerObservableList = FXCollections.observableArrayList();
 
-        customerList.forEach(obj->{
-            customerObservableList.add(obj);
-        });
-
-
         tblCustomers.setItems(customerObservableList);
-// -----------------------------------------------------------------------------------
-
+// ----------------------------------------------------------------------------------
 
         try {
             String SQL = "SELECT * FROM customer";
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/thogakade", "root", "1234");
+            Connection connection = DBConnection.getInstance().getConnection();
+            System.out.println(connection);
             PreparedStatement psTm = connection.prepareStatement(SQL);
             ResultSet resultSet = psTm.executeQuery();
-            while (resultSet.next()){
-                System.out.println(resultSet.getString("CustTitle")+resultSet.getString("CustName"));
-                Customer customer =new Customer(
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString("CustTitle") + resultSet.getString("CustName"));
+                Customer customer = new Customer(
                         resultSet.getString("CustID"),
                         resultSet.getString("CustTitle"),
                         resultSet.getString("CustName"),
@@ -158,7 +153,23 @@ public class ViewFormController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
-
+    public void btnDeleteOnAction(ActionEvent actionEvent) {
+        String SQL = "DELETE FROM customer WHERE CustID='" + txtId.getText() + "'";
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            boolean isDeleted = connection.createStatement().executeUpdate(SQL)>0;
+            if (isDeleted){
+                new Alert(Alert.AlertType.INFORMATION,"Customer Deleted !!!").show();
+            }
+            loadTable();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
+
+
+//com.mysql.cj.jdbc.ConnectionImpl@619eb068
+//com.mysql.cj.jdbc.ConnectionImpl@2b3349a2

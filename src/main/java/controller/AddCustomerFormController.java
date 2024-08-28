@@ -46,16 +46,7 @@ public class AddCustomerFormController implements Initializable {
 
     @FXML
     void btnAddCustomerOnAction(ActionEvent event) {
-        List<Customer> customerList = DBConnection.getInstance().getConnection();
-//        customerList.add(
-////                new Customer(
-////                        txtId.getText(),
-////                        txtName.getText(),
-////                        txtAddress.getText(),
-////                        cmbTitle.getValue(),
-////                        dateDob.getValue()
-////                )
-//        );
+
     }
 
 

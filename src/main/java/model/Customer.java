@@ -25,7 +25,7 @@ public class Customer {
     public Customer(String id, String title, String name, String address, LocalDate dob, Double salary, String city, String province, String postalCode) {
         this.id = id;
         this.title = title;
-        this.name = title+". "+name;
+        this.name = name;
         this.address = address;
         this.dob = dob;
         this.salary = salary;

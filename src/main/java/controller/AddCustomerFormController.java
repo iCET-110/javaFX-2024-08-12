@@ -39,21 +39,23 @@ public class AddCustomerFormController implements Initializable {
         titles.add("MR.");
         titles.add("Miss");
 
+
+
         cmbTitle.setItems(titles);
     }
 
     @FXML
     void btnAddCustomerOnAction(ActionEvent event) {
         List<Customer> customerList = DBConnection.getInstance().getConnection();
-        customerList.add(
-                new Customer(
-                        txtId.getText(),
-                        txtName.getText(),
-                        txtAddress.getText(),
-                        cmbTitle.getValue(),
-                        dateDob.getValue()
-                )
-        );
+//        customerList.add(
+////                new Customer(
+////                        txtId.getText(),
+////                        txtName.getText(),
+////                        txtAddress.getText(),
+////                        cmbTitle.getValue(),
+////                        dateDob.getValue()
+////                )
+//        );
     }
 
 

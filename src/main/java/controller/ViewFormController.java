@@ -46,8 +46,19 @@ public class ViewFormController implements Initializable {
     @FXML
     private TableView<Customer> tblCustomers;
 
+    CustomerService service =new CustomerController();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        colDob.setCellValueFactory(new PropertyValueFactory<>("dob"));
+        colSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
+        colCity.setCellValueFactory(new PropertyValueFactory<>("city"));
+        colProvince.setCellValueFactory(new PropertyValueFactory<>("province"));
+        colPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         ObservableList<String> titles = FXCollections.observableArrayList();
         titles.add("Mr");
         titles.add("Miss");
@@ -82,90 +93,30 @@ public class ViewFormController implements Initializable {
                 txtCity.getText(), txtProvince.getText(),
                 txtPostalCode.getText()
         );
-//INSERT INTO Customer VALUES('C001','Mr','Danapala','1981-2-6',40000,'No.20 Walana','Panadura','Western',12500);
-        try {
-            String SQL = "INSERT INTO customer VALUES(?,?,?,?,?,?,?,?,?)";
-            Connection connection = DBConnection.getInstance().getConnection();
-            PreparedStatement psTm = connection.prepareStatement(SQL);
-            psTm.setObject(1, customer.getId());
-            psTm.setObject(2, customer.getTitle());
-            psTm.setObject(3, customer.getName());
-            psTm.setDate(4, Date.valueOf(customer.getDob()));
-            psTm.setDouble(5, customer.getSalary());
-            psTm.setObject(6, customer.getAddress());
-            psTm.setObject(7, customer.getCity());
-            psTm.setObject(8, customer.getProvince());
-            psTm.setObject(9, customer.getPostalCode());
-
-            boolean b = psTm.executeUpdate() > 0;
-            System.out.println(b);
-
-            if (b) {
-                new Alert(Alert.AlertType.INFORMATION, "Customer Added!").show();
-                loadTable();
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        ;
+        if(service.addCustomer(customer)){
+            new Alert(Alert.AlertType.INFORMATION,"Customer Added !!").show();
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Customer Not Added :(").show();
         }
+//INSERT INTO Customer VALUES('C001','Mr','Danapala','1981-2-6',40000,'No.20 Walana','Panadura','Western',12500);
 
-        System.out.println(customer);
     }
 
 
     private void loadTable() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-        colDob.setCellValueFactory(new PropertyValueFactory<>("dob"));
-        colSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
-        colCity.setCellValueFactory(new PropertyValueFactory<>("city"));
-        colProvince.setCellValueFactory(new PropertyValueFactory<>("province"));
-        colPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
-
-        ObservableList<Customer> customerObservableList = FXCollections.observableArrayList();
-
+        ObservableList<Customer> customerObservableList =service.getAll();
         tblCustomers.setItems(customerObservableList);
 // ----------------------------------------------------------------------------------
 
-        try {
-            String SQL = "SELECT * FROM customer";
-            Connection connection = DBConnection.getInstance().getConnection();
-            System.out.println(connection);
-            PreparedStatement psTm = connection.prepareStatement(SQL);
-            ResultSet resultSet = psTm.executeQuery();
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString("CustTitle") + resultSet.getString("CustName"));
-                Customer customer = new Customer(
-                        resultSet.getString("CustID"),
-                        resultSet.getString("CustTitle"),
-                        resultSet.getString("CustName"),
-                        resultSet.getString("CustAddress"),
-                        resultSet.getDate("DOB").toLocalDate(),
-                        resultSet.getDouble("salary"),
-                        resultSet.getString("City"),
-                        resultSet.getString("Province"),
-                        resultSet.getString("postalCode")
-                );
-                customerObservableList.add(customer);
-                System.out.println(customer);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
+    }
     public void btnDeleteOnAction(ActionEvent actionEvent) {
-        String SQL = "DELETE FROM customer WHERE CustID='" + txtId.getText() + "'";
-        try {
-            Connection connection = DBConnection.getInstance().getConnection();
-            boolean isDeleted = connection.createStatement().executeUpdate(SQL)>0;
-            if (isDeleted){
-                new Alert(Alert.AlertType.INFORMATION,"Customer Deleted !!!").show();
-            }
-            loadTable();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+
+        if (service.deleteCustomer(txtId.getText())){
+            new Alert(Alert.AlertType.INFORMATION,"Customer Deleted !!").show();
+        }else{
+            new Alert(Alert.AlertType.ERROR).show();
         }
     }
 }

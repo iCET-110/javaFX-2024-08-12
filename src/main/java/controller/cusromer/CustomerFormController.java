@@ -1,7 +1,6 @@
-package controller;
+package controller.cusromer;
 
 import com.jfoenix.controls.JFXTextField;
-import db.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,11 +11,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import model.Customer;
 
 import java.net.URL;
-import java.sql.*;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class ViewFormController implements Initializable {
+public class CustomerFormController implements Initializable {
 
     public JFXTextField txtId;
     public JFXTextField txtName;
@@ -50,6 +47,8 @@ public class ViewFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
 
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));

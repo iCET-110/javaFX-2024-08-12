@@ -58,7 +58,7 @@
          </children>
       </Group>
       <ComboBox fx:id="cmbCustomerId" layoutX="65.0" layoutY="125.0" prefWidth="150.0" promptText="Customer ID" />
-      <ComboBox fx:id="comItemCode" layoutX="63.0" layoutY="181.0" prefWidth="150.0" promptText="Item Code" />
+      <ComboBox fx:id="cmbItemCode" layoutX="63.0" layoutY="181.0" prefWidth="150.0" promptText="Item Code" />
       <TextField fx:id="txtCustomerName" layoutX="253.0" layoutY="125.0" promptText="Customer Name" />
       <TextField fx:id="txtCustomerAddress" layoutX="444.0" layoutY="126.0" promptText="Address" />
       <TextField fx:id="txtItemDescription" layoutX="235.0" layoutY="181.0" promptText="Description" />

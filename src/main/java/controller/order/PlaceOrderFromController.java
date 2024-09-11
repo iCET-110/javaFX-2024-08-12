@@ -1,9 +1,11 @@
 package controller.order;
 
 import controller.cusromer.CustomerController;
+import controller.item.ItemController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,8 +15,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
+import model.CartTM;
 import model.Customer;
+import model.Item;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -24,6 +29,7 @@ import java.util.ResourceBundle;
 
 public class PlaceOrderFromController implements Initializable {
 
+    public ComboBox <String> cmbItemCode;
     @FXML
     private ComboBox<String> cmbCustomerId;
 
@@ -55,7 +61,7 @@ public class PlaceOrderFromController implements Initializable {
     private Label lblTime;
 
     @FXML
-    private TableView<?> tblCart;
+    private TableView<CartTM> tblCart;
 
     @FXML
     private TextField txtCustomerAddress;
@@ -79,13 +85,21 @@ public class PlaceOrderFromController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadDateAndTime();
         loadCustomerIds();
+        loadItemCodes();
 
         cmbCustomerId.getSelectionModel().selectedItemProperty().addListener((observableValue, s, newVal) -> {
             if (newVal!=null){
                 searchCustomer(newVal);
             }
         });
+        cmbItemCode.getSelectionModel().selectedItemProperty().addListener((observableValue, s, newVal) -> {
+            if (newVal!=null){
+                searchItem(newVal);
+            }
+        });
     }
+
+
 
     private void loadDateAndTime() {
         Date date = new Date();
@@ -109,9 +123,28 @@ public class PlaceOrderFromController implements Initializable {
 
     }
 
-
+    ObservableList<CartTM> cartTMS = FXCollections.observableArrayList();
     @FXML
     void btnAddToCartOnAction(ActionEvent event) {
+
+
+        colItemCode.setCellValueFactory(new PropertyValueFactory<>("itemCode"));
+        colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
+        colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+
+        String itemCode = cmbItemCode.getValue();
+        String description = txtItemDescription.getText();
+        Integer qty = Integer.parseInt(txtQty.getText());
+        Double unitPrice = Double.parseDouble(txtUnitPrice.getText());
+        Double total = unitPrice*qty;
+
+        cartTMS.add(new CartTM(itemCode,description,qty,unitPrice,total));
+
+        tblCart.setItems(cartTMS);
+
+
 
     }
 
@@ -122,6 +155,17 @@ public class PlaceOrderFromController implements Initializable {
 
     private void loadCustomerIds(){
         cmbCustomerId.setItems(CustomerController.getInstance().getCustomerIds());
+    }
+
+    private void loadItemCodes(){
+        cmbItemCode.setItems(ItemController.getInstance().getItemCodes());
+    }
+
+    private void searchItem(String newVal) {
+        Item item = ItemController.getInstance().searchItem(newVal);
+        txtItemDescription.setText(item.getDescription());
+        txtStock.setText(item.getQty().toString());
+        txtUnitPrice.setText(item.getUnitPrice().toString());
     }
 
     private void searchCustomer(String customerID){

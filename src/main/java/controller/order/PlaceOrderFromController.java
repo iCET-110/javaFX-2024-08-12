@@ -10,11 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import model.CartTM;
@@ -30,6 +26,7 @@ import java.util.ResourceBundle;
 public class PlaceOrderFromController implements Initializable {
 
     public ComboBox <String> cmbItemCode;
+    public Label lblNetTotal;
     @FXML
     private ComboBox<String> cmbCustomerId;
 
@@ -140,7 +137,13 @@ public class PlaceOrderFromController implements Initializable {
         Double unitPrice = Double.parseDouble(txtUnitPrice.getText());
         Double total = unitPrice*qty;
 
-        cartTMS.add(new CartTM(itemCode,description,qty,unitPrice,total));
+        if (Integer.parseInt(txtStock.getText())<qty){
+            new Alert(Alert.AlertType.WARNING,"Invalid QTY").show();
+        }else{
+            cartTMS.add(new CartTM(itemCode,description,qty,unitPrice,total));
+            calcNetTotal();
+        }
+
 
         tblCart.setItems(cartTMS);
 
@@ -173,6 +176,17 @@ public class PlaceOrderFromController implements Initializable {
         txtCustomerName.setText(customer.getName());
         txtCustomerAddress.setText(customer.getAddress());
         System.out.println(customerID);
+    }
+
+    private void calcNetTotal(){
+        Double total=0.0;
+
+        for (CartTM cartTM: cartTMS){
+            total+=cartTM.getTotal();
+        }
+
+        lblNetTotal.setText(total.toString()+"/=");
+
     }
 
 

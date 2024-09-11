@@ -85,5 +85,15 @@
          </font>
       </JFXButton>
       <Separator layoutX="86.0" layoutY="165.0" prefHeight="0.0" prefWidth="498.0" />
+      <Label layoutX="41.0" layoutY="462.0" text="Net Total :" textFill="RED">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblNetTotal" layoutX="123.0" layoutY="462.0" text="00000" textFill="RED">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

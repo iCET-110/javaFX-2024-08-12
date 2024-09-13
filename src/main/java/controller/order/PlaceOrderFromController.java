@@ -174,7 +174,11 @@ public class PlaceOrderFromController implements Initializable {
 
         Order order = new Order(orderId, orderDate, customerId, orderDetails);
 
-        new OrderController().placeOrder(order);
+        try {
+            new OrderController().placeOrder(order);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println(order);
     }

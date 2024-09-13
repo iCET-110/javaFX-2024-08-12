@@ -8,12 +8,10 @@ import java.util.List;
 
 public class OrderDetailController {
     public boolean addOrderDetail(List<OrderDetail> orderDetails){
-        boolean isAdd=false;
         for (OrderDetail orderDetail:orderDetails) {
-            isAdd = addOrderDetail(orderDetail);
+            return addOrderDetail(orderDetail);
         }
-
-        return isAdd;
+        return false;
     }
     public boolean addOrderDetail(OrderDetail orderDetails){
         String SQL = "INSERT INTO orderdetail VALUES(?,?,?,?)";

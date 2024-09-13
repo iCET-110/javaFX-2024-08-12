@@ -1,6 +1,9 @@
 package controller.order;
 
+import controller.item.ItemController;
+import controller.item.ItemFormController;
 import db.DBConnection;
+import javafx.scene.control.Alert;
 import model.Order;
 
 import java.sql.Connection;
@@ -12,6 +15,7 @@ public class OrderController {
         try {
             String SQL = "INSERT INTO orders VALUE(?,?,?)";
             Connection connection = DBConnection.getInstance().getConnection();
+            connection.setAutoCommit(false);
             PreparedStatement psTm = connection.prepareStatement(SQL);
             psTm.setObject(1,order.getOrderId());
             psTm.setObject(2,order.getOrderDate());
@@ -19,6 +23,15 @@ public class OrderController {
            boolean isOrderAdd = psTm.executeUpdate()>0;
            if (isOrderAdd){
                boolean isOrderDetailAdd = new OrderDetailController().addOrderDetail(order.getOrderDetails());
+               if (isOrderDetailAdd){
+                 boolean isUpdateStock = ItemController.getInstance().updateStock(order.getOrderDetails());
+                 if (isUpdateStock){
+
+                     new Alert(Alert.AlertType.INFORMATION,"Order Placed !!").show();
+                 }else{
+                     new Alert(Alert.AlertType.ERROR,"Order Not Placed :(").show();
+                 }
+               }
            }
 
 

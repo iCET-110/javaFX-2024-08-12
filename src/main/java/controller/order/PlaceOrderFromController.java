@@ -2,6 +2,7 @@ package controller.order;
 
 import controller.cusromer.CustomerController;
 import controller.item.ItemController;
+import db.DBConnection;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -9,13 +10,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -167,6 +174,8 @@ public class PlaceOrderFromController implements Initializable {
 
         Order order = new Order(orderId, orderDate, customerId, orderDetails);
 
+        new OrderController().placeOrder(order);
+
         System.out.println(order);
     }
 
@@ -204,4 +213,22 @@ public class PlaceOrderFromController implements Initializable {
     }
 
 
+    public void btnCommitOnAction(ActionEvent actionEvent) {
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            connection.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void btnAddCustomerFromOnAction(ActionEvent actionEvent) {
+        Stage stage = new Stage();
+        try {
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../../view/customer_form.fxml"))));
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

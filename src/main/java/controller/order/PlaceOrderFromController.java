@@ -13,20 +13,22 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
-import model.CartTM;
-import model.Customer;
-import model.Item;
+import model.*;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class PlaceOrderFromController implements Initializable {
 
     public ComboBox <String> cmbItemCode;
     public Label lblNetTotal;
+    public TextField txtOrderId;
     @FXML
     private ComboBox<String> cmbCustomerId;
 
@@ -153,7 +155,19 @@ public class PlaceOrderFromController implements Initializable {
 
     @FXML
     void btnPlaceOrderOnAction(ActionEvent event) {
+        String orderId = txtOrderId.getText();
+        LocalDate orderDate = LocalDate.now();
+        String customerId = cmbCustomerId.getValue();
 
+        List<OrderDetail> orderDetails = new ArrayList<>();
+
+        cartTMS.forEach(obj->{
+            orderDetails.add(new OrderDetail(orderId,obj.getItemCode(),obj.getQty(),0.0));
+        });
+
+        Order order = new Order(orderId, orderDate, customerId, orderDetails);
+
+        System.out.println(order);
     }
 
     private void loadCustomerIds(){

@@ -1,7 +1,7 @@
 package controller.cusromer;
 
 import javafx.collections.ObservableList;
-import model.Customer;
+import dto.Customer;
 
 public interface CustomerService1 {
     boolean addCustomer(Customer customer);

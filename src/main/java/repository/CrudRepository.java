@@ -1,7 +1,6 @@
 package repository;
 
 import javafx.collections.ObservableList;
-import model.Customer;
 
 public interface CrudRepository <T> extends SuperDao{
     boolean save(T t);

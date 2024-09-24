@@ -1,10 +1,9 @@
 package repository.custom;
 
-import javafx.collections.ObservableList;
-import model.Customer;
+import dto.Customer;
+import entity.CustomerEntity;
 import repository.CrudRepository;
-import repository.SuperDao;
 
-public interface CustomerDao extends CrudRepository<Customer> {
+public interface CustomerDao extends CrudRepository<CustomerEntity> {
 
 }

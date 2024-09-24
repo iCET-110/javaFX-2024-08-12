@@ -1,7 +1,7 @@
 package repository.custom.impl;
 
 import javafx.collections.ObservableList;
-import model.Item;
+import dto.Item;
 import repository.custom.ItemDao;
 
 public class ItemDaoImpl implements ItemDao {

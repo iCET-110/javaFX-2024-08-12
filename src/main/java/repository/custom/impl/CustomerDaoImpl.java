@@ -1,13 +1,40 @@
 package repository.custom.impl;
 
+import db.DBConnection;
+import entity.CustomerEntity;
 import javafx.collections.ObservableList;
-import model.Customer;
+import dto.Customer;
+import javafx.scene.control.Alert;
 import repository.custom.CustomerDao;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class CustomerDaoImpl implements CustomerDao {
     @Override
-    public boolean save(Customer customer) {
+    public boolean save(CustomerEntity customer) {
+        System.out.println("Repository : "+customer);
+        try {
+            String SQL = "INSERT INTO customer VALUES(?,?,?,?,?,?,?,?,?)";
+            Connection connection = DBConnection.getInstance().getConnection();
+            PreparedStatement psTm = connection.prepareStatement(SQL);
+            psTm.setObject(1, customer.getId());
+            psTm.setObject(2, customer.getTitle());
+            psTm.setObject(3, customer.getName());
+            psTm.setDate(4, Date.valueOf(customer.getDob()));
+            psTm.setDouble(5, customer.getSalary());
+            psTm.setObject(6, customer.getAddress());
+            psTm.setObject(7, customer.getCity());
+            psTm.setObject(8, customer.getProvince());
+            psTm.setObject(9, customer.getPostalCode());
+            return psTm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Error : " + e.getMessage()).show();
+        }
         return false;
+
     }
 
     @Override
@@ -16,17 +43,17 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public ObservableList<Customer> getAll() {
+    public ObservableList<CustomerEntity> getAll() {
         return null;
     }
 
     @Override
-    public boolean update(Customer customer) {
+    public boolean update(CustomerEntity customer) {
         return false;
     }
 
     @Override
-    public Customer search(String id) {
+    public CustomerEntity search(String id) {
         return null;
     }
 }

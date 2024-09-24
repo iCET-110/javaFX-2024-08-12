@@ -1,10 +1,9 @@
 package controller.order;
 
 import controller.item.ItemController;
-import controller.item.ItemFormController;
 import db.DBConnection;
 import javafx.scene.control.Alert;
-import model.Order;
+import dto.Order;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -8,7 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import model.Customer;
+import dto.Customer;
 import service.ServiceFactory;
 import service.custom.CustomerService;
 import util.ServiceType;

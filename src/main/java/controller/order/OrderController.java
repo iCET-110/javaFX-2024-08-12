@@ -36,6 +36,5 @@ public class OrderController {
         } finally {
             connection.setAutoCommit(true);
         }
-
     }
 }

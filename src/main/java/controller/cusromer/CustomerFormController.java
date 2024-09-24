@@ -9,6 +9,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.Customer;
+import service.ServiceFactory;
+import service.custom.CustomerService;
+import util.ServiceType;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -43,7 +46,7 @@ public class CustomerFormController implements Initializable {
     @FXML
     private TableView<Customer> tblCustomers;
 
-    CustomerService service = CustomerController.getInstance();
+    CustomerService1 service = CustomerController.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -82,6 +85,7 @@ public class CustomerFormController implements Initializable {
 
 
     public void btnAddOnAction(ActionEvent actionEvent) {
+        CustomerService customerService = ServiceFactory.getInstance().getServiceType(ServiceType.CUSTOMER);
         Customer customer = new Customer(
                 txtId.getText(),
                 cmbTitle.getValue().toString(),
@@ -93,7 +97,7 @@ public class CustomerFormController implements Initializable {
                 txtPostalCode.getText()
         );
         ;
-        if(service.addCustomer(customer)){
+        if(customerService.addCustomer(customer)){
             new Alert(Alert.AlertType.INFORMATION,"Customer Added !!").show();
         }else {
             new Alert(Alert.AlertType.ERROR,"Customer Not Added :(").show();

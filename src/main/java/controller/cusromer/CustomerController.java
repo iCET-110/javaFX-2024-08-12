@@ -9,7 +9,7 @@ import util.CrudUtil;
 
 import java.sql.*;
 
-public class CustomerController implements CustomerService {
+public class CustomerController implements CustomerService1 {
 
     private static CustomerController instance;
 
